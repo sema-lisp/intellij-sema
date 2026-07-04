@@ -54,6 +54,10 @@ jobs:
           cache-read-only: true
       # The LSP/DAP tests shell out to a real `sema` binary; install it so those
       # tests actually run rather than being skipped for lack of a binary.
+      # sema pulls in libudev-sys (via a transitive dep), which needs the
+      # system libudev headers to build on Linux.
+      - name: Install build deps for Sema
+        run: sudo apt-get update && sudo apt-get install -y libudev-dev pkg-config
       - name: Install Sema
         run: cargo install sema-lang --locked
       - name: Run tests
