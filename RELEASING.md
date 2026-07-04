@@ -3,7 +3,7 @@
 How to sign and publish the **Sema** IntelliJ plugin to the
 [JetBrains Marketplace](https://plugins.jetbrains.com).
 
-The Gradle project root is `editors/intellij/` inside the [sema](https://github.com/HelgeSverre/sema)
+The Gradle project root is `editors/intellij/` inside the [sema](https://github.com/sema-lisp/intellij-sema)
 monorepo. Run every command in this document from that directory.
 
 ## Decisions
