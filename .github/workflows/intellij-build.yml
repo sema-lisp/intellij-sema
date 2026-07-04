@@ -52,6 +52,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: true
+      # The LSP/DAP tests shell out to a real `sema` binary; install it so those
+      # tests actually run rather than being skipped for lack of a binary.
+      - name: Install Sema
+        run: cargo install sema-lang --locked
       - name: Run tests
         run: ./gradlew check
       - name: Collect test results
