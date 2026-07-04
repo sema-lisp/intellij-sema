@@ -1,6 +1,18 @@
+<div align="center">
+
+<img src="https://sema-lang.com/logo.svg" alt="Sema" height="64">
+
 # Sema for IntelliJ
 
-IntelliJ IDEA / JetBrains IDE support for [Sema](https://sema-lang.com), a Lisp dialect with first-class LLM primitives.
+**[Sema](https://sema-lang.com) support for [IntelliJ Platform](https://www.jetbrains.com) IDEs** — a Lisp with first-class LLM primitives.
+
+[![CI](https://img.shields.io/github/actions/workflow/status/sema-lisp/intellij-sema/intellij-build.yml?branch=main&label=CI&logo=github)](https://github.com/sema-lisp/intellij-sema/actions)
+[![License](https://img.shields.io/github/license/sema-lisp/intellij-sema?color=c8a855)](LICENSE)
+[![Website](https://img.shields.io/badge/website-sema--lang.com-c8a855)](https://sema-lang.com)
+
+</div>
+
+This plugin brings Sema language support to IntelliJ IDEA and other JetBrains IDEs — syntax highlighting, full LSP integration, inline evaluation, step-through debugging, and a live notebook editor.
 
 ## Install
 
@@ -53,6 +65,12 @@ Signing and publishing to the Marketplace are covered in [RELEASING.md](RELEASIN
 
 ## Links
 
-- [Sema language](https://sema-lang.com) · [Playground](https://sema.run) · [Source](https://github.com/HelgeSverre/sema)
-- [This plugin's repository](https://github.com/sema-lisp/intellij-sema)
-- [LSP4IJ](https://plugins.jetbrains.com/plugin/23257-lsp4ij)
+- **Website** — [sema-lang.com](https://sema-lang.com)
+- **Playground** — [sema.run](https://sema.run)
+- **Documentation** — [sema-lang.com/docs](https://sema-lang.com/docs/)
+- **Grammar** — [tree-sitter-sema](https://github.com/sema-lisp/tree-sitter-sema)
+- **Repository** — [sema-lisp/intellij-sema](https://github.com/sema-lisp/intellij-sema)
+
+## License
+
+[MIT](LICENSE) © [Helge Sverre](https://github.com/HelgeSverre)
