@@ -3,8 +3,8 @@
 How to sign and publish the **Sema** IntelliJ plugin to the
 [JetBrains Marketplace](https://plugins.jetbrains.com).
 
-The Gradle project root is `editors/intellij/` inside the [sema](https://github.com/sema-lisp/intellij-sema)
-monorepo. Run every command in this document from that directory.
+The Gradle project root is the [repository root](https://github.com/sema-lisp/intellij-sema).
+Run every command in this document from there.
 
 ## Decisions
 
@@ -20,7 +20,8 @@ monorepo. Run every command in this document from that directory.
   feature classes (`LSPClientFeatures`, `LSPCompletionFeature`, `LSPFormattingFeature`, etc.) — are
   marked `@ApiStatus.Experimental` in 0.19.4 with no stable alternative. The verifier reports these
   as non-blocking *experimental API usage* warnings (no compatibility problems).
-- **Publishing is manual `workflow_dispatch`, not tag/release-driven** — see the monorepo note below.
+- **Publishing is a manually-dispatched (`workflow_dispatch`) workflow** — deliberate, so a release is a
+  reviewed action rather than an automatic side-effect of pushing a tag.
 
 `build.gradle.kts` is already wired for signing and publishing. It reads four values from the
 environment:
@@ -34,7 +35,7 @@ environment:
 
 ## Signing keys
 
-The signing identity lives in `editors/intellij/.secrets/`. **The whole folder is gitignored**
+The signing identity lives in `.secrets/` at the repo root. **The whole folder is gitignored**
 (see `.gitignore`) — it must never be committed.
 
 | File | What it is |
@@ -50,7 +51,6 @@ The signing identity lives in `editors/intellij/.secrets/`. **The whole folder i
 ### Generating the keys (first time, or if lost)
 
 ```bash
-cd editors/intellij
 mkdir -p .secrets && chmod 700 .secrets
 openssl rand -base64 32 | tr -d '\n' > .secrets/private_key_password.txt
 PW=$(cat .secrets/private_key_password.txt)
@@ -83,7 +83,6 @@ repo's **Settings → Secrets and variables → Actions**.
 Upload the three signing secrets once the keys exist:
 
 ```bash
-cd editors/intellij
 gh secret set PRIVATE_KEY          < .secrets/private.pem
 gh secret set CERTIFICATE_CHAIN    < .secrets/chain.crt
 gh secret set PRIVATE_KEY_PASSWORD < .secrets/private_key_password.txt
@@ -99,7 +98,6 @@ gh secret set PUBLISH_TOKEN --body '<your-marketplace-token>'
 ## Local commands
 
 ```bash
-cd editors/intellij
 ./gradlew test          # compile + run unit tests
 ./gradlew verifyPlugin  # IntelliJ Plugin Verifier against current + recommended IDEs
 ./gradlew buildPlugin   # unsigned ZIP  -> build/distributions/*.zip
@@ -123,19 +121,11 @@ source .secrets/signing.env && ./gradlew publishPlugin  # sign + upload (needs P
 - The release channel is derived from the version: a plain version (e.g. `1.0.0`) publishes to the
   **default (stable)** channel; a pre-release suffix like `1.1.0-beta.1` publishes to `beta`.
 
-## Monorepo note — why publishing is manual-dispatch
-
-The sibling standalone plugin repos drive publishing off GitHub Releases / version tags. This
-monorepo can't: the shared cargo-dist workflow (`.github/workflows/release.yml`) triggers on **any**
-tag matching `**[0-9]+.[0-9]+.[0-9]+*`, and any IntelliJ release tag would match and cross-trigger a
-Rust release. So the plugin is published via a manually-dispatched workflow that creates no tags and
-no GitHub Releases. The shared Rust CI is left untouched.
-
 ## CI workflows
 
 | Workflow | Trigger | Does |
 | --- | --- | --- |
-| `intellij-build.yml` | push to `main` / PR touching `editors/intellij/**` | Build, test (`check`), `verifyPlugin`; upload artifacts |
+| `intellij-build.yml` | push to `main` / any PR | Build, test (`check`), `verifyPlugin`; upload artifacts |
 | `intellij-release.yml` | manual `workflow_dispatch` | `signPlugin` (dry-run) or `publishPlugin` → Marketplace; upload signed ZIP artifact |
 
 ## First release (manual)
