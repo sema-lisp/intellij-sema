@@ -7,6 +7,7 @@
 **[Sema](https://sema-lang.com) support for [IntelliJ Platform](https://www.jetbrains.com) IDEs** — a Lisp with first-class LLM primitives.
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sema-lisp/intellij-sema/intellij-build.yml?branch=main&label=CI&logo=github)](https://github.com/sema-lisp/intellij-sema/actions)
+[![JetBrains Marketplace](https://img.shields.io/jetbrains/plugin/v/32806?label=marketplace&color=c8a855&logo=jetbrains)](https://plugins.jetbrains.com/plugin/32806-sema/)
 [![License](https://img.shields.io/github/license/sema-lisp/intellij-sema?color=c8a855)](LICENSE)
 [![Website](https://img.shields.io/badge/website-sema--lang.com-c8a855)](https://sema-lang.com)
 
@@ -16,9 +17,9 @@ This plugin brings Sema language support to IntelliJ IDEA and other JetBrains ID
 
 ## Install
 
-The plugin is pending publication on the [JetBrains Marketplace](https://plugins.jetbrains.com/). Once live, install it from your IDE via **Settings → Plugins → Marketplace** and search for **Sema**.
+Install from the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/32806-sema/): in your IDE, open **Settings → Plugins → Marketplace**, search for **Sema**, and click **Install**.
 
-Until then (or to run a local build), build the plugin and install it from disk:
+To run a local build instead, build the plugin and install it from disk:
 
 ```bash
 ./gradlew buildPlugin
