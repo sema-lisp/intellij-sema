@@ -10,9 +10,10 @@ class SemaLexer : LexerBase() {
         "and", "begin", "case", "cond", "define", "define-record-type",
         "defmacro", "defmethod", "defmulti", "defun", "defn", "def",
         "catch", "delay", "do", "eval", "fn", "force", "if",
-        "lambda", "let", "let*", "letrec", "macroexpand", "match",
+        "lambda", "let", "let*", "letrec", "macroexpand", "match", "match*",
         "or", "quasiquote", "quote", "set!", "throw", "try",
-        "unless", "when", "while", "progn",
+        "unless", "when", "while", "progn", "async", "await",
+        "define-syntax", "define-values", "let-values", "let*-values",
         "export", "import", "load", "module",
         "defagent", "deftool", "message", "prompt"
     )
