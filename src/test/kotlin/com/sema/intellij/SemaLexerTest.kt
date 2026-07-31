@@ -129,6 +129,19 @@ class SemaLexerTest {
     }
 
     @Test
+    fun workflowAndPolicyForms() {
+        val tokens = tokensOf("defworkflow defpolicy approval policy/without workflow/approval")
+            .filter { it.first != TokenType.WHITE_SPACE }
+        assertEquals(SemaTokenTypes.DEFINITION_KEYWORD, tokens[0].first)
+        assertEquals(SemaTokenTypes.DEFINITION_KEYWORD, tokens[1].first)
+        assertEquals(SemaTokenTypes.SYMBOL, tokens[2].first)
+        assertEquals("policy/without", tokens[3].second)
+        assertEquals(SemaTokenTypes.SYMBOL, tokens[3].first)
+        assertEquals("workflow/approval", tokens[4].second)
+        assertEquals(SemaTokenTypes.SYMBOL, tokens[4].first)
+    }
+
+    @Test
     fun dotToken() {
         val dot = tokensOf("(foo . bar)").find { it.first == SemaTokenTypes.DOT }
         assertNotNull(dot)

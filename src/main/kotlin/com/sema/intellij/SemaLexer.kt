@@ -15,13 +15,13 @@ class SemaLexer : LexerBase() {
         "unless", "when", "while", "progn", "async", "await",
         "define-syntax", "define-values", "let-values", "let*-values",
         "export", "import", "load", "module",
-        "defagent", "deftool", "message", "prompt"
+        "defagent", "deftool", "defworkflow", "defpolicy", "message", "prompt"
     )
 
     @Suppress("SpellCheckingInspection")
     private val DEFINITION_FORMS = setOf(
         "define", "defun", "defn", "def", "defmacro", "defmethod",
-        "defmulti", "defagent", "deftool", "define-record-type"
+        "defmulti", "defagent", "deftool", "defworkflow", "defpolicy", "define-record-type"
     )
 
     private var buffer: CharSequence = ""
