@@ -25,6 +25,7 @@ class SemaSyntaxHighlighterTest {
             SemaTokenTypes.CHARACTER to SemaColors.CHARACTER,
             SemaTokenTypes.SPECIAL_FORM to SemaColors.SPECIAL_FORM,
             SemaTokenTypes.DEFINITION_KEYWORD to SemaColors.DEFINITION_KEYWORD,
+            SemaTokenTypes.BUILTIN to SemaColors.BUILTIN,
         )
         for ((token, expected) in pairs) {
             val highlights = highlightFor(token)
@@ -51,7 +52,8 @@ class SemaSyntaxHighlighterTest {
             SemaColors.STRING, SemaColors.NUMBER, SemaColors.KEYWORD,
             SemaColors.SYMBOL, SemaColors.BOOLEAN, SemaColors.NIL,
             SemaColors.CHARACTER, SemaColors.PARENS, SemaColors.BRACKETS,
-            SemaColors.BRACES, SemaColors.SPECIAL_FORM, SemaColors.DEFINITION_KEYWORD)
+            SemaColors.BRACES, SemaColors.SPECIAL_FORM, SemaColors.DEFINITION_KEYWORD,
+            SemaColors.BUILTIN)
         for (color in colors) assertNotNull(color.externalName)
     }
 }

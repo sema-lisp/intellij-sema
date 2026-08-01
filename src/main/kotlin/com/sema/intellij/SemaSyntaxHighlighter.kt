@@ -27,6 +27,7 @@ class SemaSyntaxHighlighter : SyntaxHighlighterBase() {
         SemaTokenTypes.LBRACE, SemaTokenTypes.RBRACE -> pack(SemaColors.BRACES)
         SemaTokenTypes.SPECIAL_FORM -> pack(SemaColors.SPECIAL_FORM)
         SemaTokenTypes.DEFINITION_KEYWORD -> pack(SemaColors.DEFINITION_KEYWORD)
+        SemaTokenTypes.BUILTIN -> pack(SemaColors.BUILTIN)
         else -> TextAttributesKey.EMPTY_ARRAY
     }
 }

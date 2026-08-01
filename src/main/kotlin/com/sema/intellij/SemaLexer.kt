@@ -24,6 +24,12 @@ class SemaLexer : LexerBase() {
         "defmulti", "defagent", "deftool", "defworkflow", "defpolicy", "define-record-type"
     )
 
+    @Suppress("SpellCheckingInspection")
+    private val BUILTINS = setOf(
+        "approval", "policy/without", "tool/policy-subjects", "workflow/approval",
+        "workflow/policy-without", "workflow/tool-result"
+    )
+
     private var buffer: CharSequence = ""
     private var startOffset = 0
     private var endOffset = 0
@@ -225,6 +231,7 @@ class SemaLexer : LexerBase() {
             text == "nil" -> SemaTokenTypes.NIL
             text in DEFINITION_FORMS -> SemaTokenTypes.DEFINITION_KEYWORD
             text in SPECIAL_FORMS -> SemaTokenTypes.SPECIAL_FORM
+            text in BUILTINS -> SemaTokenTypes.BUILTIN
             else -> SemaTokenTypes.SYMBOL
         }
     }

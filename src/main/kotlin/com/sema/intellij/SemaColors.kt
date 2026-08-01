@@ -60,4 +60,8 @@ object SemaColors {
     val DEFINITION_KEYWORD = TextAttributesKey.createTextAttributesKey(
         "SEMA_DEFINITION_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD
     )
+    @JvmField
+    val BUILTIN = TextAttributesKey.createTextAttributesKey(
+        "SEMA_BUILTIN", DefaultLanguageHighlighterColors.STATIC_METHOD
+    )
 }
