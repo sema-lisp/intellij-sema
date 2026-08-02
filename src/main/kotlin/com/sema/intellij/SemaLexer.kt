@@ -26,8 +26,13 @@ class SemaLexer : LexerBase() {
 
     @Suppress("SpellCheckingInspection")
     private val BUILTINS = setOf(
-        "approval", "policy/without", "tool/policy-subjects", "workflow/approval",
-        "workflow/policy-without", "workflow/tool-result"
+        "approval", "checkpoint", "parallel", "parallel-settled", "phase",
+        "pipeline", "pipeline-settled", "policy/without", "settled-partition",
+        "settled/err?", "settled/ok?", "step", "tool/policy-subjects",
+        "workflow/approval", "workflow/check", "workflow/checkpoint",
+        "workflow/phase", "workflow/policy-without", "workflow/run",
+        "workflow/run-form", "workflow/step", "workflow/tool-call",
+        "workflow/tool-result"
     )
 
     private var buffer: CharSequence = ""

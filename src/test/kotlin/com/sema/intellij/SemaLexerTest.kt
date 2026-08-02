@@ -131,8 +131,13 @@ class SemaLexerTest {
     @Test
     fun workflowAndPolicyForms() {
         val tokens = tokensOf(
-            "defworkflow defpolicy approval policy/without workflow/approval " +
-                "workflow/policy-without workflow/tool-result tool/policy-subjects"
+            "defworkflow defpolicy approval checkpoint parallel parallel-settled " +
+                "phase pipeline pipeline-settled policy/without " +
+                "settled-partition settled/err? settled/ok? step " +
+                "tool/policy-subjects workflow/approval workflow/check " +
+                "workflow/checkpoint workflow/phase workflow/policy-without " +
+                "workflow/run workflow/run-form workflow/step " +
+                "workflow/tool-call workflow/tool-result"
         )
             .filter { it.first != TokenType.WHITE_SPACE }
         assertEquals(SemaTokenTypes.DEFINITION_KEYWORD, tokens[0].first)
