@@ -75,6 +75,7 @@ class SemaColorSettingsPage : ColorSettingsPage {
             AttributesDescriptor("Identifiers//Keyword", SemaColors.KEYWORD),
             AttributesDescriptor("Identifiers//Special form", SemaColors.SPECIAL_FORM),
             AttributesDescriptor("Identifiers//Definition keyword", SemaColors.DEFINITION_KEYWORD),
+            AttributesDescriptor("Identifiers//Builtin", SemaColors.BUILTIN),
             AttributesDescriptor("Braces and Operators//Parentheses", SemaColors.PARENS),
             AttributesDescriptor("Braces and Operators//Brackets", SemaColors.BRACKETS),
             AttributesDescriptor("Braces and Operators//Braces", SemaColors.BRACES),

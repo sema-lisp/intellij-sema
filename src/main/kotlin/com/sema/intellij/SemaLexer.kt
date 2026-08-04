@@ -15,13 +15,24 @@ class SemaLexer : LexerBase() {
         "unless", "when", "while", "progn", "async", "await",
         "define-syntax", "define-values", "let-values", "let*-values",
         "export", "import", "load", "module",
-        "defagent", "deftool", "message", "prompt"
+        "defagent", "deftool", "defworkflow", "defpolicy", "message", "prompt"
     )
 
     @Suppress("SpellCheckingInspection")
     private val DEFINITION_FORMS = setOf(
         "define", "defun", "defn", "def", "defmacro", "defmethod",
-        "defmulti", "defagent", "deftool", "define-record-type"
+        "defmulti", "defagent", "deftool", "defworkflow", "defpolicy", "define-record-type"
+    )
+
+    @Suppress("SpellCheckingInspection")
+    private val BUILTINS = setOf(
+        "approval", "checkpoint", "parallel", "parallel-settled", "phase",
+        "pipeline", "pipeline-settled", "policy/without", "settled-partition",
+        "settled/err?", "settled/ok?", "step", "tool/policy-subjects",
+        "workflow/approval", "workflow/check", "workflow/checkpoint",
+        "workflow/phase", "workflow/policy-without", "workflow/run",
+        "workflow/run-form", "workflow/step", "workflow/tool-call",
+        "workflow/tool-result"
     )
 
     private var buffer: CharSequence = ""
@@ -225,6 +236,7 @@ class SemaLexer : LexerBase() {
             text == "nil" -> SemaTokenTypes.NIL
             text in DEFINITION_FORMS -> SemaTokenTypes.DEFINITION_KEYWORD
             text in SPECIAL_FORMS -> SemaTokenTypes.SPECIAL_FORM
+            text in BUILTINS -> SemaTokenTypes.BUILTIN
             else -> SemaTokenTypes.SYMBOL
         }
     }

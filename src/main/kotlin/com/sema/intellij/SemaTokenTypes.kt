@@ -50,6 +50,8 @@ object SemaTokenTypes {
     val SPECIAL_FORM = SemaTokenType("SPECIAL_FORM")
     @JvmField
     val DEFINITION_KEYWORD = SemaTokenType("DEFINITION_KEYWORD")
+    @JvmField
+    val BUILTIN = SemaTokenType("BUILTIN")
 
     @JvmField
     val COMMENTS = TokenSet.create(LINE_COMMENT, BLOCK_COMMENT)
