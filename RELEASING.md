@@ -20,8 +20,16 @@ Run every command in this document from there.
   feature classes (`LSPClientFeatures`, `LSPCompletionFeature`, `LSPFormattingFeature`, etc.) — are
   marked `@ApiStatus.Experimental` in 0.19.4 with no stable alternative. The verifier reports these
   as non-blocking *experimental API usage* warnings (no compatibility problems).
-- **Publishing is a manually-dispatched (`workflow_dispatch`) workflow** — deliberate, so a release is a
-  reviewed action rather than an automatic side-effect of pushing a tag.
+- **Publishing runs on a `v*` tag push.** The plugin is approved on the Marketplace, so an
+  update is a routine publish rather than a first submission that needs review; the tag is
+  the reviewed action. `workflow_dispatch` is kept for a dry run and for re-publishing
+  without moving a tag. The workflow fails if the tag does not match `pluginVersion` in
+  `gradle.properties`, which stays the source of truth (it also selects the Marketplace
+  channel).
+- **The `v1.x` tags below `v1.28.1` are monorepo-era tags**, inherited when this plugin was
+  split out of `sema-lisp/sema`. They are not plugin releases and do not correspond to
+  Marketplace versions. Plugin releases start at `v1.0.0`'s successor; do not read the old
+  tags as release history.
 
 `build.gradle.kts` is already wired for signing and publishing. It reads four values from the
 environment:

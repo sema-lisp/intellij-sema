@@ -4,8 +4,14 @@
 
 ## [Unreleased]
 
+## [1.1.0]
+
 ### Added
 
+- Highlighting for the workflow policy and approval forms: `defpolicy`, `policy/without`,
+  `approval`, `workflow/approval`, `workflow/policy-without`, `workflow/tool-result`, and
+  `tool/policy-subjects`. Adds the workflow and policy builtins that were missing from the
+  lexer's builtin set.
 - Code formatting (Reformat Code) for Sema files, with a setting to disable it.
 - Structural selection (Extend/Shrink Selection) and code-block navigation by s-expression.
 - Call hierarchy, go-to-declaration, and clickable document links for `import`/`load` paths.
