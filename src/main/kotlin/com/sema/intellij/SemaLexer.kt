@@ -32,7 +32,9 @@ class SemaLexer : LexerBase() {
         "workflow/approval", "workflow/check", "workflow/checkpoint",
         "workflow/phase", "workflow/policy-without", "workflow/run",
         "workflow/run-form", "workflow/step", "workflow/tool-call",
-        "workflow/tool-result"
+        "workflow/tool-result",
+        "regex/match?", "regex/match", "regex/find-all", "regex/replace",
+        "regex/replace-all", "regex/split"
     )
 
     private var buffer: CharSequence = ""
@@ -84,7 +86,7 @@ class SemaLexer : LexerBase() {
             }
 
             ch == '#' && peekNext() == '"' -> {
-                pos++; lexString()
+                pos++; lexString(SemaTokenTypes.REGEX)
             }
 
             ch == '(' -> {
@@ -163,7 +165,7 @@ class SemaLexer : LexerBase() {
         return SemaTokenTypes.BLOCK_COMMENT
     }
 
-    private fun lexString(): IElementType {
+    private fun lexString(tokenType: IElementType = SemaTokenTypes.STRING): IElementType {
         pos++ // skip opening "
         while (pos < endOffset) {
             when (buffer[pos]) {
@@ -171,13 +173,13 @@ class SemaLexer : LexerBase() {
                     pos++; if (pos < endOffset) pos++
                 } // skip escape
                 '"' -> {
-                    pos++; return SemaTokenTypes.STRING
+                    pos++; return tokenType
                 }
 
                 else -> pos++
             }
         }
-        return SemaTokenTypes.STRING // unterminated
+        return tokenType // unterminated
     }
 
     private fun lexCharacter(): IElementType {

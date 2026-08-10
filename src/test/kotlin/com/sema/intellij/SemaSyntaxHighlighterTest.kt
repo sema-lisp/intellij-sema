@@ -17,6 +17,7 @@ class SemaSyntaxHighlighterTest {
             SemaTokenTypes.LINE_COMMENT to SemaColors.LINE_COMMENT,
             SemaTokenTypes.BLOCK_COMMENT to SemaColors.BLOCK_COMMENT,
             SemaTokenTypes.STRING to SemaColors.STRING,
+            SemaTokenTypes.REGEX to SemaColors.REGEX,
             SemaTokenTypes.NUMBER to SemaColors.NUMBER,
             SemaTokenTypes.KEYWORD to SemaColors.KEYWORD,
             SemaTokenTypes.SYMBOL to SemaColors.SYMBOL,
@@ -49,7 +50,7 @@ class SemaSyntaxHighlighterTest {
     @Test
     fun colorKeysHaveExternalNames() {
         val colors = listOf(SemaColors.LINE_COMMENT, SemaColors.BLOCK_COMMENT,
-            SemaColors.STRING, SemaColors.NUMBER, SemaColors.KEYWORD,
+            SemaColors.STRING, SemaColors.REGEX, SemaColors.NUMBER, SemaColors.KEYWORD,
             SemaColors.SYMBOL, SemaColors.BOOLEAN, SemaColors.NIL,
             SemaColors.CHARACTER, SemaColors.PARENS, SemaColors.BRACKETS,
             SemaColors.BRACES, SemaColors.SPECIAL_FORM, SemaColors.DEFINITION_KEYWORD,

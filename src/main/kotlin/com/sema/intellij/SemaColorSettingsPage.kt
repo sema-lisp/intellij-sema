@@ -16,6 +16,7 @@ class SemaColorSettingsPage : ColorSettingsPage {
 (define pi 3.14159)
 (define name "hello world")
 (define verbose? true)
+(define digits #"\d+")
 
 ; Function definition
 (defun greet (name)
@@ -67,6 +68,7 @@ class SemaColorSettingsPage : ColorSettingsPage {
             AttributesDescriptor("Comments//Line comment", SemaColors.LINE_COMMENT),
             AttributesDescriptor("Comments//Block comment", SemaColors.BLOCK_COMMENT),
             AttributesDescriptor("Literals//String", SemaColors.STRING),
+            AttributesDescriptor("Literals//Regex", SemaColors.REGEX),
             AttributesDescriptor("Literals//Number", SemaColors.NUMBER),
             AttributesDescriptor("Literals//Boolean", SemaColors.BOOLEAN),
             AttributesDescriptor("Literals//Character", SemaColors.CHARACTER),

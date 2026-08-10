@@ -16,6 +16,7 @@ class SemaSyntaxHighlighter : SyntaxHighlighterBase() {
         SemaTokenTypes.LINE_COMMENT -> pack(SemaColors.LINE_COMMENT)
         SemaTokenTypes.BLOCK_COMMENT -> pack(SemaColors.BLOCK_COMMENT)
         SemaTokenTypes.STRING -> pack(SemaColors.STRING)
+        SemaTokenTypes.REGEX -> pack(SemaColors.REGEX)
         SemaTokenTypes.NUMBER -> pack(SemaColors.NUMBER)
         SemaTokenTypes.KEYWORD -> pack(SemaColors.KEYWORD)
         SemaTokenTypes.SYMBOL -> pack(SemaColors.SYMBOL)

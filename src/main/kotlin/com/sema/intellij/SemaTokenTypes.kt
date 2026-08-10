@@ -11,6 +11,8 @@ object SemaTokenTypes {
     @JvmField
     val STRING = SemaTokenType("STRING")
     @JvmField
+    val REGEX = SemaTokenType("REGEX")
+    @JvmField
     val NUMBER = SemaTokenType("NUMBER")
     @JvmField
     val SYMBOL = SemaTokenType("SYMBOL")
@@ -56,7 +58,7 @@ object SemaTokenTypes {
     @JvmField
     val COMMENTS = TokenSet.create(LINE_COMMENT, BLOCK_COMMENT)
     @JvmField
-    val STRINGS = TokenSet.create(STRING)
+    val STRINGS = TokenSet.create(STRING, REGEX)
     @JvmField
     val WHITESPACES = TokenSet.create(com.intellij.psi.TokenType.WHITE_SPACE)
 }
