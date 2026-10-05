@@ -109,6 +109,7 @@ private val CANONICAL_BUILTINS = """
         with-session with-span with-stream workflow/approval workflow/check workflow/checkpoint workflow/mcp-handle workflow/phase workflow/policy-without workflow/run
         workflow/run-form workflow/step workflow/tool-call workflow/tool-result ws/close ws/connect ws/connected? ws/listen ws/ping ws/recv
         ws/recv-timeout ws/send zero? zip zip/create zip/extract zip/list
+        caddr char->integer char->string char-alphabetic? char-downcase char-numeric? char-upcase char-upper-case? char-whitespace? i64-array/fold i64-array/length i64-array/map i64-array/ref i64-array/set! i64-array/sum i64-array? integer->char keyword->string path/basename path/dirname path/ext stream/writable? string->char string->keyword string->list string->symbol string->utf8 string-append string-length string-ref substring symbol->string time/now-ms utf8->string
 """.trimIndent().split(Regex("\\s+")).toSet()
 
 class SemaLexer : LexerBase() {

@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+## [1.2.0]
+
+### Fixed
+
+- Match numeric literals, regex literals, and builtin aliases to the Sema reader.
+- Wait for the notebook server before loading its editor and remove exited sessions.
+
 ## [1.1.0]
 
 ### Added
