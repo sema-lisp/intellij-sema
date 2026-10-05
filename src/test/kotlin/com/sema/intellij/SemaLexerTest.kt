@@ -87,9 +87,61 @@ class SemaLexerTest {
 
     @Test
     fun regexString() {
-        val strings = tokensOf("#\"[a-z]+\"").filter { it.first == SemaTokenTypes.STRING }
-        assertEquals(1, strings.size)
-        assertEquals("#\"[a-z]+\"", strings[0].second)
+        val regexes = tokensOf("#\"[a-z]+\"").filter { it.first == SemaTokenTypes.REGEX }
+        assertEquals(1, regexes.size)
+        assertEquals("#\"[a-z]+\"", regexes[0].second)
+    }
+
+    @Test
+    fun regexLiteralFormsAreSingleTokens() {
+        val literals = listOf(
+            "#\"^\\d+$\"",
+            "#\"(\\d+)-(\\w+)\"",
+            "#\"\\\\\"",
+            "#\"\\\"[^\\\"]+\\\"\"",
+        )
+        for (literal in literals) {
+            assertEquals(listOf(SemaTokenTypes.REGEX to literal), tokensOf(literal))
+        }
+    }
+
+    @Test
+    fun regexLiteralStopsAtItsClosingQuote() {
+        val source = "#\"\\d+\" \"text\" symbol) ; comment"
+        val tokens = tokensOf(source).filter { it.first != TokenType.WHITE_SPACE }
+        assertEquals(
+            listOf(
+                SemaTokenTypes.REGEX to "#\"\\d+\"",
+                SemaTokenTypes.STRING to "\"text\"",
+                SemaTokenTypes.SYMBOL to "symbol",
+                SemaTokenTypes.RPAREN to ")",
+                SemaTokenTypes.LINE_COMMENT to "; comment",
+            ),
+            tokens,
+        )
+    }
+
+    @Test
+    fun unterminatedRegexLiteralIsStable() {
+        assertEquals(listOf(SemaTokenTypes.REGEX to "#\"unclosed"), tokensOf("#\"unclosed"))
+    }
+
+    @Test
+    fun regexBuiltinsAreSingleBuiltinTokens() {
+        val names = listOf(
+            "regex/match?", "regex/match", "regex/find-all",
+            "regex/replace", "regex/replace-all", "regex/split",
+        )
+        for (name in names) {
+            assertEquals(listOf(SemaTokenTypes.BUILTIN to name), tokensOf(name))
+        }
+    }
+
+    @Test
+    fun similarRegexNamesRemainSymbols() {
+        for (name in listOf("regex/matches", "regex/split!", "my-regex/match")) {
+            assertEquals(listOf(SemaTokenTypes.SYMBOL to name), tokensOf(name))
+        }
     }
 
     @Test

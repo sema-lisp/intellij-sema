@@ -193,7 +193,7 @@ class SemaLexer : LexerBase() {
             }
 
             ch == '#' && peekNext() == '"' -> {
-                pos++; lexString()
+                pos++; lexString(SemaTokenTypes.REGEX)
             }
 
             ch == '(' -> {
@@ -278,7 +278,7 @@ class SemaLexer : LexerBase() {
         return SemaTokenTypes.BLOCK_COMMENT
     }
 
-    private fun lexString(): IElementType {
+    private fun lexString(tokenType: IElementType = SemaTokenTypes.STRING): IElementType {
         pos++ // skip opening "
         while (pos < endOffset) {
             when (buffer[pos]) {
@@ -286,13 +286,13 @@ class SemaLexer : LexerBase() {
                     pos++; if (pos < endOffset) pos++
                 } // skip escape
                 '"' -> {
-                    pos++; return SemaTokenTypes.STRING
+                    pos++; return tokenType
                 }
 
                 else -> pos++
             }
         }
-        return SemaTokenTypes.STRING // unterminated
+        return tokenType // unterminated
     }
 
     private fun lexCharacter(): IElementType {

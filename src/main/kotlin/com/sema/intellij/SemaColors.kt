@@ -17,6 +17,10 @@ object SemaColors {
         "SEMA_STRING", DefaultLanguageHighlighterColors.STRING
     )
     @JvmField
+    val REGEX = TextAttributesKey.createTextAttributesKey(
+        "SEMA_REGEX", DefaultLanguageHighlighterColors.STRING
+    )
+    @JvmField
     val NUMBER = TextAttributesKey.createTextAttributesKey(
         "SEMA_NUMBER", DefaultLanguageHighlighterColors.NUMBER
     )
