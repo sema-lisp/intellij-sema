@@ -47,20 +47,23 @@ class SemaLexerTest {
 
     @Test
     fun quoteFamily() {
-        val types = tokensOf("' ` , ,@").filter { it.first != TokenType.WHITE_SPACE }.map { it.first }
-        assertEquals(listOf(SemaTokenTypes.QUOTE, SemaTokenTypes.QUASIQUOTE, SemaTokenTypes.SPLICE), types)
+        val types = tokensOf("' ` , ,@ @").filter { it.first != TokenType.WHITE_SPACE }.map { it.first }
+        assertEquals(
+            listOf(
+                SemaTokenTypes.QUOTE,
+                SemaTokenTypes.QUASIQUOTE,
+                SemaTokenTypes.UNQUOTE,
+                SemaTokenTypes.SPLICE,
+                SemaTokenTypes.DEREF,
+            ),
+            types,
+        )
     }
 
     @Test
-    fun commaIsWhitespaceNotUnquote() {
-        val symbols = tokensOf(",foo ,bar").filter { it.first == SemaTokenTypes.SYMBOL }.map { it.second }
-        assertEquals(listOf("foo", "bar"), symbols)
-    }
-
-    @Test
-    fun commaBeforeSymbolIsWhitespace() {
+    fun commaBeforeSymbolIsUnquote() {
         val types = tokensOf(",x").filter { it.first != TokenType.WHITE_SPACE }.map { it.first }
-        assertEquals(listOf(SemaTokenTypes.SYMBOL), types)
+        assertEquals(listOf(SemaTokenTypes.UNQUOTE, SemaTokenTypes.SYMBOL), types)
     }
 
     @Test
@@ -98,9 +101,21 @@ class SemaLexerTest {
 
     @Test
     fun floats() {
-        val numbers = tokensOf("3.14 -0.5 1.0").filter { it.first == SemaTokenTypes.NUMBER }
-        assertEquals(3, numbers.size)
-        assertEquals(listOf("3.14", "-0.5", "1.0"), numbers.map { it.second })
+        val numbers = tokensOf("3.14 -0.5 1.0 2e3 -4.5e-2").filter { it.first == SemaTokenTypes.NUMBER }
+        assertEquals(listOf("3.14", "-0.5", "1.0", "2e3", "-4.5e-2"), numbers.map { it.second })
+    }
+
+    @Test
+    fun numericTower() {
+        val source = "1/2 3+4i +i -2i #xFF #b101 #e1.5 #e#xFF #x#e1F"
+        val numbers = tokensOf(source).filter { it.first == SemaTokenTypes.NUMBER }
+        assertEquals(source.split(" "), numbers.map { it.second })
+    }
+
+    @Test
+    fun invalidNumberIsNotPartiallyHighlighted() {
+        assertEquals(TokenType.BAD_CHARACTER, tokensOf("0x1F").single().first)
+        assertEquals(TokenType.BAD_CHARACTER, tokensOf("#ei").single().first)
     }
 
     @Test
@@ -142,9 +157,18 @@ class SemaLexerTest {
             .filter { it.first != TokenType.WHITE_SPACE }
         assertEquals(SemaTokenTypes.DEFINITION_KEYWORD, tokens[0].first)
         assertEquals(SemaTokenTypes.DEFINITION_KEYWORD, tokens[1].first)
-        for (token in tokens.drop(2)) {
+        assertEquals(SemaTokenTypes.SPECIAL_FORM, tokens.first { it.second == "policy/without" }.first)
+        for (token in tokens.drop(2).filter { it.second != "policy/without" }) {
             assertEquals(SemaTokenTypes.BUILTIN, token.first)
         }
+    }
+
+    @Test
+    fun documentedBuiltins() {
+        val source = "bytes/length async/with-timeout path/canonicalize db/open workflow/mcp-handle"
+        val tokens = tokensOf(source).filter { it.first != TokenType.WHITE_SPACE }
+        assertEquals(source.split(" "), tokens.map { it.second })
+        assertTrue(tokens.all { it.first == SemaTokenTypes.BUILTIN })
     }
 
     @Test
@@ -212,8 +236,8 @@ class SemaLexerTest {
     }
 
     @Test
-    fun badCharacter() {
-        assertEquals(TokenType.BAD_CHARACTER, tokensOf("@")[0].first)
+    fun derefOperator() {
+        assertEquals(SemaTokenTypes.DEREF, tokensOf("@value")[0].first)
     }
 
     @Test
@@ -233,7 +257,14 @@ class SemaLexerTest {
 
     @Test
     fun symbolChars() {
-        val symbols = tokensOf("+ - * / < > = _! ? & % ^ ~").filter { it.first == SemaTokenTypes.SYMBOL }
-        assertEquals(13, symbols.size)
+        val source = "foo&bar foo%bar foo^bar foo~bar foo.bar"
+        val symbols = tokensOf(source).filter { it.first == SemaTokenTypes.SYMBOL }
+        assertEquals(source.split(" "), symbols.map { it.second })
+    }
+
+    @Test
+    fun hashMayEndASymbol() {
+        assertEquals("guard-err#", tokensOf("guard-err#").single().second)
+        assertEquals(SemaTokenTypes.SYMBOL, tokensOf("guard-err#").single().first)
     }
 }

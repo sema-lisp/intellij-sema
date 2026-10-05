@@ -1,6 +1,7 @@
 package com.sema.intellij.notebook
 
 import com.intellij.ide.BrowserUtil
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.FileEditorState
 import com.intellij.openapi.fileEditor.FileEditorStateLevel
@@ -12,19 +13,21 @@ import com.intellij.ui.components.JBLabel
 import com.intellij.ui.jcef.JBCefApp
 import com.intellij.ui.jcef.JBCefBrowser
 import com.intellij.util.ui.JBUI
+import com.sema.intellij.config.SemaBinary
+import com.sema.intellij.config.SemaConfigurable
 import java.awt.BorderLayout
 import java.beans.PropertyChangeListener
 import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.JPanel
-import com.sema.intellij.config.SemaBinary
-import com.sema.intellij.config.SemaConfigurable
+import javax.swing.SwingUtilities
 
 class SemaNotebookFileEditor(
     private val project: Project,
     private val file: VirtualFile,
 ) : UserDataHolderBase(), FileEditor {
     private var browser: JBCefBrowser? = null
+    private var disposed = false
     private val component: JComponent = createComponent()
 
     private fun createComponent(): JComponent {
@@ -46,18 +49,50 @@ class SemaNotebookFileEditor(
 
         val session = SemaNotebookSessionService.getInstance(project).start(file)
         if (JBCefApp.isSupported()) {
-            return JBCefBrowser(session.url).also { browser = it }.component
+            val panel = JPanel(BorderLayout()).apply {
+                border = JBUI.Borders.empty(16)
+                add(JBLabel("Starting Sema notebook…"), BorderLayout.NORTH)
+            }
+            val cefBrowser = JBCefBrowser().also { browser = it }
+            whenNotebookReady(session) { error ->
+                panel.removeAll()
+                if (error == null) {
+                    cefBrowser.loadURL(session.url)
+                    panel.border = null
+                    panel.add(cefBrowser.component, BorderLayout.CENTER)
+                } else {
+                    panel.add(JBLabel("Could not open the Sema notebook: $error"), BorderLayout.NORTH)
+                }
+                panel.revalidate()
+                panel.repaint()
+            }
+            return panel
         }
 
-        return JPanel(BorderLayout()).apply {
-            border = JBUI.Borders.empty(16)
-            add(JBLabel("JCEF is not available in this IDE runtime."), BorderLayout.NORTH)
-            add(
-                JButton("Open in Browser").apply {
-                    addActionListener { BrowserUtil.browse(session.url, project) }
-                },
-                BorderLayout.SOUTH,
-            )
+        val openButton = JButton("Open in Browser").apply {
+            isEnabled = false
+            addActionListener { BrowserUtil.browse(session.url, project) }
+        }
+        return JPanel(BorderLayout()).also { panel ->
+            val statusLabel = JBLabel("Starting Sema notebook…")
+            panel.apply {
+                border = JBUI.Borders.empty(16)
+                add(statusLabel, BorderLayout.NORTH)
+                add(openButton, BorderLayout.SOUTH)
+            }
+            whenNotebookReady(session) { error ->
+                statusLabel.text = error ?: "JCEF is not available in this IDE runtime."
+                openButton.isEnabled = error == null
+            }
+        }
+    }
+
+    private fun whenNotebookReady(session: SemaNotebookSession, update: (String?) -> Unit) {
+        ApplicationManager.getApplication().executeOnPooledThread {
+            val error = SemaNotebookSessionService.getInstance(project).waitUntilReady(session)
+            SwingUtilities.invokeLater {
+                if (!disposed && !project.isDisposed && file.isValid) update(error)
+            }
         }
     }
 
@@ -83,6 +118,7 @@ class SemaNotebookFileEditor(
         FileEditorState.INSTANCE
 
     override fun dispose() {
+        disposed = true
         browser?.dispose()
         SemaNotebookSessionService.getInstance(project).stop(file)
     }

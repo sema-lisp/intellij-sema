@@ -43,6 +43,8 @@ object SemaTokenTypes {
     @JvmField
     val SPLICE = SemaTokenType("SPLICE")
     @JvmField
+    val DEREF = SemaTokenType("DEREF")
+    @JvmField
     val HASH_DISPATCH = SemaTokenType("HASH_DISPATCH")
     @JvmField
     val DOT = SemaTokenType("DOT")
