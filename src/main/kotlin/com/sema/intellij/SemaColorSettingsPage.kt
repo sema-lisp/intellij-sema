@@ -43,8 +43,8 @@ class SemaColorSettingsPage : ColorSettingsPage {
 ; Boolean
 (define flag #t)
 
-#| Block comment
-   spanning multiple lines |#
+; Line comment
+; spanning multiple lines
 (map #(+ % 1) nums)
 
 ; Imports and modules

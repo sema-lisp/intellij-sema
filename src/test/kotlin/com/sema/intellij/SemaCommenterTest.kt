@@ -10,10 +10,10 @@ class SemaCommenterTest {
     fun lineCommentPrefix() = assertEquals(";", commenter.lineCommentPrefix)
 
     @Test
-    fun blockCommentPrefix() = assertEquals("#|", commenter.blockCommentPrefix)
+    fun blockCommentPrefix() = assertNull(commenter.blockCommentPrefix)
 
     @Test
-    fun blockCommentSuffix() = assertEquals("|#", commenter.blockCommentSuffix)
+    fun blockCommentSuffix() = assertNull(commenter.blockCommentSuffix)
 
     @Test
     fun noCommentedBlockComment() {

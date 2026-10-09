@@ -6,6 +6,15 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class SemaLexerTest {
+    @Test
+    fun bodyMacrosAreSpecialForms() {
+        for (name in listOf("parameterize", "term/with-bracketed-paste",
+                            "term/with-focus-events", "term/with-kitty-keys")) {
+            assertEquals(listOf(SemaTokenTypes.SPECIAL_FORM to name), tokensOf(name))
+        }
+        assertEquals(listOf(SemaTokenTypes.SYMBOL to "eqv?"), tokensOf("eqv?"))
+    }
+
     private fun tokensOf(source: String): List<Pair<IElementType?, String>> {
         val lexer = SemaLexer()
         lexer.start(source)
@@ -269,15 +278,18 @@ class SemaLexerTest {
     }
 
     @Test
-    fun nestedBlockComments() {
-        val comments = tokensOf("#|outer #|inner|# text|#").filter { it.first == SemaTokenTypes.BLOCK_COMMENT }
-        assertEquals(1, comments.size)
-        assertTrue(comments[0].second.contains("inner"))
+    fun unsupportedBlockCommentsAreNotComments() {
+        val tokens = tokensOf("#|outer #|inner|# text|#")
+        assertTrue(tokens.none { it.first == SemaTokenTypes.BLOCK_COMMENT })
+        assertTrue(tokens.any { it.first == TokenType.BAD_CHARACTER })
     }
 
     @Test
-    fun unterminatedBlockComment() {
-        assertEquals(SemaTokenTypes.BLOCK_COMMENT, tokensOf("#|outer #|inner|#").last().first)
+    fun completeHashBooleans() {
+        for (literal in listOf("#t", "#f", "#true", "#false")) {
+            assertEquals(listOf(SemaTokenTypes.BOOLEAN to literal), tokensOf(literal))
+        }
+        assertEquals(listOf(TokenType.BAD_CHARACTER to "#tx"), tokensOf("#tx"))
     }
 
     @Test

@@ -39,7 +39,7 @@ To run a local build instead, build the plugin and install it from disk:
 - **LSP integration** (via LSP4IJ): code completion, hover documentation, go-to-definition, references, rename, diagnostics, folding ranges, inlay hints, document highlight, semantic token coloring, call hierarchy, and clickable `import`/`load` path links
 - **Code lenses** — evaluate top-level forms inline with `sema/evalResult` rendering, plus a "Clear Sema Results" action
 - **Code formatting** — Reformat Code for Sema source (toggleable)
-- **Structural editing** — brace matching, auto-pairing `()` `[]` `{}`, line (`;`) and block (`#| |#`) commenting, and Extend/Shrink Selection by s-expression
+- **Structural editing** — brace matching, auto-pairing `()` `[]` `{}`, line (`;`) commenting, and Extend/Shrink Selection by s-expression
 - **Debugging (DAP)** — step-through debugging with breakpoints, continue, step over/into/out, stack frames, scopes, and variable inspection (launches `sema dap`)
 - **Sema Notebook editor** for `.sema-nb` files — live cell evaluation in a JCEF-backed view, run-all, open in an external browser, and export to Markdown
 - **Run configurations** — right-click a `.sema` file to run it, or create a configuration from the Run menu

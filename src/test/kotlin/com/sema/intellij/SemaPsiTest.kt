@@ -42,7 +42,7 @@ class SemaPsiTest : LightPlatformTestCase() {
 
     @Test
     fun testParsesCommentOnly() {
-        val psiFile = parseSema(";; comment\n#|block|#")
+        val psiFile = parseSema(";; comment\n; another comment")
         assertNotNull(psiFile)
         assertEquals(0, countTokensOfType(psiFile, com.intellij.psi.TokenType.BAD_CHARACTER))
     }
