@@ -135,6 +135,8 @@ class SemaLexer : LexerBase() {
         "dotimes", "for-range", "guard", "when-let", "if-let",
         "with-stream", "with-open", "with-span", "with-session", "with-retry",
         "io/with-raw-mode", "term/with-alt-screen", "term/with-mouse",
+        "term/with-bracketed-paste", "term/with-focus-events", "term/with-kitty-keys",
+        "parameterize",
         "llm/with-budget", "policy/without", "message", "prompt", "else"
     )
 
@@ -187,7 +189,6 @@ class SemaLexer : LexerBase() {
                 SemaTokenTypes.LINE_COMMENT
             }
 
-            ch == '#' && peekNext() == '|' -> lexBlockComment()
             ch == '"' -> lexString()
             ch == 'f' && peekNext() == '"' -> {
                 pos++; lexString()
@@ -264,21 +265,6 @@ class SemaLexer : LexerBase() {
 
     private fun peekNext(): Char? = if (pos + 1 < endOffset) buffer[pos + 1] else null
 
-    private fun lexBlockComment(): IElementType {
-        pos += 2 // skip #|
-        var depth = 1
-        while (pos < endOffset && depth > 0) {
-            if (pos + 1 < endOffset && buffer[pos] == '#' && buffer[pos + 1] == '|') {
-                depth++; pos += 2
-            } else if (pos + 1 < endOffset && buffer[pos] == '|' && buffer[pos + 1] == '#') {
-                depth--; pos += 2
-            } else {
-                pos++
-            }
-        }
-        return SemaTokenTypes.BLOCK_COMMENT
-    }
-
     private fun lexString(tokenType: IElementType = SemaTokenTypes.STRING): IElementType {
         pos++ // skip opening "
         while (pos < endOffset) {
@@ -314,8 +300,13 @@ class SemaLexer : LexerBase() {
     }
 
     private fun lexHashBoolean(): IElementType {
-        pos += 2 // skip #t or #f
-        return SemaTokenTypes.BOOLEAN
+        while (pos < endOffset && !isDelimiter(buffer[pos])) pos++
+        val text = buffer.subSequence(tokenStart, pos).toString()
+        return if (text in setOf("#t", "#f", "#true", "#false")) {
+            SemaTokenTypes.BOOLEAN
+        } else {
+            TokenType.BAD_CHARACTER
+        }
     }
 
     private fun lexHashDispatch(): IElementType {
